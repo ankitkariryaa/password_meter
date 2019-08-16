@@ -13,6 +13,7 @@ import LZString = require("lz-string");
 import Helper = require("./helper");
 import Config = require("./config");
 import Dictionaries = require("./dict-misc");
+import BasicFunctionality = require("./basic-functions")
 import UIMisc = require("./ui-misc");
 import NeuralNetwork = require("./nn-misc");
 
@@ -68,6 +69,14 @@ export module PasswordMeter {
             return this.data["ui"];
         }
 
+        setBF(bf: BasicFunctionality.BasicFunctionality.BasicFunctionality) {
+            this.data["bf"] = bf;
+        }
+
+        getBF(): BasicFunctionality.BasicFunctionality.BasicFunctionality {
+            return this.data["bf"];
+        }
+
         setNN(nn: NeuralNetwork.NeuralNetwork.NeuralNetworkInterface) {
             this.data["nn"] = nn;
         }
@@ -80,7 +89,7 @@ export module PasswordMeter {
             setBootstrap(bootstrap:Bootstrap):void {
                 this.data["bootstrap"] = bootstrap;
             }
-        
+
             getBootstrap():Bootstrap {
                 return this.data["bootstrap"];
             }

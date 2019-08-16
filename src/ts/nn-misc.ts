@@ -13,8 +13,8 @@ export module NeuralNetwork {
 	var neverHeardFromNN = true;
 
 	// Helper function designed to post-process neural network guess numbers
-	// to account for capitalization. 
-	// It scales guess numbers by 1.5 if they capitalize the first character, 
+	// to account for capitalization.
+	// It scales guess numbers by 1.5 if they capitalize the first character,
 	// by 2 if they capitalize all characters, by 10 if they use any other pattern,
 	// and 1 if there are no uppercase characters.
 	function uppercasePredictabilityPostProcessing(pw: string): number {
@@ -53,6 +53,8 @@ export module NeuralNetwork {
 		const scaleToMeter = 67 / 15;
 
 		var UI = PasswordMeter.PasswordMeter.instance.getUI();
+		var BF = PasswordMeter.PasswordMeter.instance.getBF();
+		console.log('Inside: nnCallback')
 		result = result * uppercasePredictabilityPostProcessing(password);
 		if (verboseMode) {
 			console.log(password + " is NN guess # " + result);
@@ -73,16 +75,19 @@ export module NeuralNetwork {
 		}
 		UI.setNeuralnetMapping(password, value);
 		UI.displayRating(password);
+		BF.setNeuralnetMapping(password, value);
+		BF.displayRating(password);
 	}
 
 	// potentialTODO except for the logging, this looks exactly the same as above
-	// This alternate callback function is used instead when evaluating 
+	// This alternate callback function is used instead when evaluating
 	// concrete suggestions for a better password
 	export function nnFixedCallback(result: number, password: string): void {
 		// Make 10^15 guesses fill 2/3rds of meter
 		const scaleToMeter = 67 / 15;
-
+		console.log('Inside: nnFixedCallback')
 		var UI = PasswordMeter.PasswordMeter.instance.getUI();
+		var BF = PasswordMeter.PasswordMeter.instance.getBF();
 		result = result * uppercasePredictabilityPostProcessing(password);
 		if (verboseMode) {
 			console.log("Fixed possibility " + password + " is NN guess # " + result);
@@ -104,6 +109,8 @@ export module NeuralNetwork {
 		}
 		UI.setNeuralnetMapping(password, value);
 		UI.synthesizeFixed(password);
+		BF.setNeuralnetMapping(password, value);
+		BF.displayRating(password);
 	}
 
 	export class NeuralNetworkInterface {
