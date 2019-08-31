@@ -1,6 +1,7 @@
 // pass in jquery reference, LZString reference and boolean flag for verbose output
 import JQuery = require("jquery");
 import LZString = require("lz-string");
+import sjcl  = require('sjcl');
 import PasswordMeter = require("./PasswordMeter");
 
 export module Helper {
@@ -44,6 +45,11 @@ export module Helper {
 			return words.length;
 		}
 
+		calculateHash(pw:string): string {
+			const ba = sjcl.hash.sha256.hash(pw);
+			const hash = sjcl.codec.hex.fromBits(ba);
+			return hash;
+		}
 		// Function to decompress a .txt file that contains correctly-formatted,
 		// compressed, dictionary file data
 		decompressFile(file: string): Array<string> {

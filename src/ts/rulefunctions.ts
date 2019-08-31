@@ -18,7 +18,15 @@ export module RuleFunctions {
         detail: ResultsDetail;
     }
 
-    export function verifyMinimumRequirements(pw: string, username: string): VerifyResult {
+    // export function personalInfoFeedback(pw: string, personalInfo: Array<string>): VerifyResult {
+    //     var registry = PasswordMeter.PasswordMeter.instance;
+    //     var config: Config.Config.Config = registry.getConfig();
+    //     var dictionaries = registry.getDictionaries();
+    //     var explanation: { [key: string]: string } = {};
+    //     var compliance: { [key: string]: boolean } = {};
+
+    // }
+    export function verifyMinimumRequirements(pw: string, username: string, coreInfo: Array<string>, allInfo: Array<string>): VerifyResult {
         var registry = PasswordMeter.PasswordMeter.instance;
         var config: Config.Config.Config = registry.getConfig();
         var dictionaries = registry.getDictionaries();
@@ -414,6 +422,87 @@ export module RuleFunctions {
             }
             compliance["usernameDifference"] = compliant;
         }
+        // dimension 9: password - personal info comparison
+        if (config.personalInfoDifference.active) {
+            var thisExplanation = "";
+            var compliant = false;
+
+            // explain
+             // thisExplanation = "Not base your password on information publicly available on your social media profile";
+            thisExplanation = "Not base your password on information publicly known about you";
+            //check
+            var pwcopy = pw.toLowerCase();
+            // remove all occurrences of username
+            let piInPw: Array<string>  = new Array<string> ();
+
+            let coreInfoSorted = coreInfo.sort(function(a:string, b:string):number{
+              // ASC  -> a.length - b.length
+              // DESC -> b.length - a.length
+              return b.length - a.length;
+            });
+            for (let item of coreInfoSorted){
+                if (pwcopy.includes(item)){
+                  var re = new RegExp(item, 'g');
+                  pwcopy = pwcopy.replace(re,'');
+                  piInPw.push(item);
+                }
+            }
+            if (coreInfo.length == 0 || pw.length == 0 || piInPw.length == 0) {
+                compliant = true;
+            }
+
+            // report
+            if (compliant) {
+            } else {
+                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
+            }
+            if (!compliant) {
+                explanation["personalInfoDifference"] = thisExplanation;
+            }
+            compliance["personalInfoDifference"] = compliant;
+        }
+
+               // dimension 10: password - all text from profile comparison
+        if (config.allUserInfoDifference.active) {
+            var thisExplanation = "";
+            var compliant = false;
+
+            // explain
+            thisExplanation = "Not base your password on words you commonly use on your social media profile";
+
+            //check
+            var pwcopy = pw.toLowerCase();
+            // remove all occurrences of username
+            let allRemoved: Array<string>  = new Array<string> ();
+            let allInfoInPw: Array<string>  = new Array<string> ();
+
+            let allInfoSorted = allInfo.sort(function(a:string, b:string):number{
+              // ASC  -> a.length - b.length
+              // DESC -> b.length - a.length
+              return b.length - a.length;
+            });
+            for (let item of allInfoSorted){
+                if (pwcopy.includes(item)){
+                  var re = new RegExp(item, 'g');
+                  pwcopy = pwcopy.replace(re,'');    
+                  allInfoInPw.push(item);
+                }
+            }
+            if (allInfo.length == 0 || pw.length == 0 || allInfoInPw.length == 0) {
+                compliant = true;
+            }
+
+            // report
+            if (compliant) {
+            } else {
+                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
+            }
+
+            if (!compliant) {
+                explanation["allInfoDifference"] = thisExplanation;
+            }
+            compliance["allInfoDifference"] = compliant;
+        }
 
         // potentialTODO reduce operation
         var overallCompliance: boolean = true;
@@ -432,6 +521,121 @@ export module RuleFunctions {
 
         return ret;
     }
+
+    interface personalInfoInPasswordComment{
+        count: number,
+        reasonWhy: string;
+        publicText: string;
+        sensitiveText: string;
+        problemText: string,
+        remaining: string
+    }
+
+    export function personalInfoInPassword(pw: string, coreInfo: Array<string>): personalInfoInPasswordComment { 
+        //Returns the length of the longest string of characters in the password that are from the context */
+        var count = 0;
+        var publicText = "";
+        var sensitiveText = "";
+        var problemText = "";
+        var reasonWhy = "";
+        var remaining = pw; // the password after contextual information, if any, has been removed
+
+
+        //check
+        var pwcopy = pw.toLowerCase();
+        // remove all occurrences of info
+        let piInPw: Array<string>  = new Array<string> ();
+
+        let coreInfoSorted = coreInfo.sort(function(a:string, b:string):number{
+          // ASC  -> a.length - b.length
+          // DESC -> b.length - a.length
+          return b.length - a.length;
+        });
+        for (let item of coreInfoSorted){
+            if (pwcopy.includes(item)){
+              var re = new RegExp(item, 'g');
+              pwcopy = pwcopy.replace(re,'');
+              piInPw.push(item);
+            }
+        }
+
+        if (piInPw.length != 0) {
+            for (var i = 0; i < piInPw.length; i++) {
+                count += piInPw[i].length;
+            }
+            problemText = piInPw.join(", ").escapeHTML();
+            publicText = "Don't use your personal information in your password";
+            sensitiveText = "Don't use your personal information (" + piInPw.join(", ") + ") in your password";
+            reasonWhy = "Attackers know to guess your personal information as part of your password";
+        }
+
+         return {
+            count: count,
+            reasonWhy: reasonWhy,
+            publicText: publicText,
+            sensitiveText: sensitiveText,
+            problemText: problemText,
+            remaining: pwcopy
+        }
+    }
+
+    interface allInfoInPasswordComment{
+        count: number,
+        reasonWhy: string;
+        publicText: string;
+        sensitiveText: string;
+        problemText: string, 
+        remaining: string
+    }
+
+    export function allInfoInPassword(pw: string, allInfo: Array<string>): personalInfoInPasswordComment {
+        //Returns the length of the longest string of characters in the password that are from the context */
+        var count = 0;
+        var publicText = "";
+        var sensitiveText = "";
+        var problemText = "";
+        var reasonWhy = "";
+        var remaining = pw; // the password after contextual information, if any, has been removed
+
+
+        //check
+        var pwcopy = pw.toLowerCase();
+        // remove all occurrences of info
+        let piInPw: Array<string>  = new Array<string> ();
+
+        let allInfoSorted = allInfo.sort(function(a:string, b:string):number{
+          // ASC  -> a.length - b.length
+          // DESC -> b.length - a.length
+          return b.length - a.length;
+        });
+        for (let item of allInfoSorted){
+            if (pwcopy.includes(item)){
+              var re = new RegExp(item, 'g');
+              pwcopy = pwcopy.replace(re,'');
+              piInPw.push(item);
+            }
+        }
+
+        if (piInPw.length != 0) {
+            for (var i = 0; i < piInPw.length; i++) {
+                count += piInPw[i].length;
+            }
+            problemText = piInPw.join(", ").escapeHTML();
+            publicText = "Don't use your information available on your social media profile in your password";
+            sensitiveText = "Don't use your information available on your social media profile (" + piInPw.join(", ") + ") in your password";
+            reasonWhy = "Attackers know to guess your social media information as part of your password";
+        }
+
+         return {
+            count: count,
+            reasonWhy: reasonWhy,
+            publicText: publicText,
+            sensitiveText: sensitiveText,
+            problemText: problemText,
+            remaining: pwcopy
+        }
+    }
+
 
     interface PwLengthComment {
         length: number;

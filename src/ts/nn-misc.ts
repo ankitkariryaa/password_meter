@@ -50,15 +50,15 @@ export module NeuralNetwork {
 	// When it returns, it will display the rating (update the UI).
 	function nnCallback(result: number, password: string): void {
 		// Make 10^15 guesses fill 2/3rds of meter
-		const scaleToMeter = 67 / 15;
-
-		var UI = PasswordMeter.PasswordMeter.instance.getUI();
-		var BF = PasswordMeter.PasswordMeter.instance.getBF();
-		console.log('Inside: nnCallback')
-		result = result * uppercasePredictabilityPostProcessing(password);
-		if (verboseMode) {
-			console.log(password + " is NN guess # " + result);
+		if(!password){
+			return;
 		}
+		const scaleToMeter = 67 / 15;
+		var strengthCalculator = PasswordMeter.PasswordMeter.instance.getStrengthCalculator();
+		result = result * uppercasePredictabilityPostProcessing(password);
+		// if (verboseMode) {
+		// 	console.log(password + " is NN guess # " + result);
+		// }
 		neverHeardFromNN = false;
 		var value = log10(result) * scaleToMeter;
 		// With estimates, we can get fractional/negative guess numbers
@@ -73,25 +73,28 @@ export module NeuralNetwork {
 		if (password.length > 0 && result == Number.POSITIVE_INFINITY) {
 			value = 100;
 		}
-		UI.setNeuralnetMapping(password, value);
-		UI.displayRating(password);
-		BF.setNeuralnetMapping(password, value);
-		BF.displayRating(password);
+		// console.log('Setting the results in basicFunctionality: '+ password + ' value:' + value);
+
+		// UI.setNeuralnetMapping(password, value);
+		// UI.displayRating(password);
+		strengthCalculator.setNeuralnetMapping(password, value);
+		strengthCalculator.fromNNDisplayRating(password);
 	}
 
 	// potentialTODO except for the logging, this looks exactly the same as above
 	// This alternate callback function is used instead when evaluating
 	// concrete suggestions for a better password
 	export function nnFixedCallback(result: number, password: string): void {
+		if(!password){
+			return;
+		}
 		// Make 10^15 guesses fill 2/3rds of meter
 		const scaleToMeter = 67 / 15;
-		console.log('Inside: nnFixedCallback')
-		var UI = PasswordMeter.PasswordMeter.instance.getUI();
-		var BF = PasswordMeter.PasswordMeter.instance.getBF();
+		var strengthCalculator = PasswordMeter.PasswordMeter.instance.getStrengthCalculator();
 		result = result * uppercasePredictabilityPostProcessing(password);
-		if (verboseMode) {
-			console.log("Fixed possibility " + password + " is NN guess # " + result);
-		}
+		// if (verboseMode) {
+		// 	console.log("Fixed possibility " + password + " is NN guess # " + result);
+		// }
 		neverHeardFromNN = false;
 		var value = log10(result) * scaleToMeter;
 
@@ -107,10 +110,10 @@ export module NeuralNetwork {
 		if (password.length > 0 && result == Number.POSITIVE_INFINITY) {
 			value = 100;
 		}
-		UI.setNeuralnetMapping(password, value);
-		UI.synthesizeFixed(password);
-		BF.setNeuralnetMapping(password, value);
-		BF.displayRating(password);
+		// console.log('Setting the results in basicFunctionality: '+ password + ' value:' + value);
+
+		strengthCalculator.setNeuralnetMapping(password, value);
+		strengthCalculator.fromNNDisplayRating(password);
 	}
 
 	export class NeuralNetworkInterface {
@@ -135,7 +138,6 @@ export module NeuralNetwork {
 
 		var neuralNetworkConfig = config.neuralNetworkConfig;
 
-		var verboseMode = false;
 		var nnFixed = new NeuralNetworkClient(nnFixedCallback, neuralNetworkConfig);
 		var nn = new NeuralNetworkClient(nnCallback, neuralNetworkConfig);
 		var instance = new NeuralNetworkInterface(nn, nnFixed);

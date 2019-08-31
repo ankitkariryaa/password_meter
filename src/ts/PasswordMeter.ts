@@ -13,9 +13,10 @@ import LZString = require("lz-string");
 import Helper = require("./helper");
 import Config = require("./config");
 import Dictionaries = require("./dict-misc");
-import BasicFunctionality = require("./basic-functions")
-import UIMisc = require("./ui-misc");
 import NeuralNetwork = require("./nn-misc");
+import UnigramExtractor = require("./unigram-extractor");
+import StrengthCalculator = require("./strength-calculator");
+
 
 export module PasswordMeter {
     class Registry {
@@ -61,20 +62,12 @@ export module PasswordMeter {
             return this.data["dictionaries"];
         }
 
-        setUI(ui: UIMisc.UIMisc.UIMisc) {
-            this.data["ui"] = ui;
+        setStrengthCalculator(sc: StrengthCalculator.StrengthCalculator.StrengthCalculator) {
+            this.data["sc"] = sc;
         }
 
-        getUI(): UIMisc.UIMisc.UIMisc {
-            return this.data["ui"];
-        }
-
-        setBF(bf: BasicFunctionality.BasicFunctionality.BasicFunctionality) {
-            this.data["bf"] = bf;
-        }
-
-        getBF(): BasicFunctionality.BasicFunctionality.BasicFunctionality {
-            return this.data["bf"];
+        getStrengthCalculator(): StrengthCalculator.StrengthCalculator.StrengthCalculator {
+            return this.data["sc"];
         }
 
         setNN(nn: NeuralNetwork.NeuralNetwork.NeuralNetworkInterface) {
@@ -85,15 +78,14 @@ export module PasswordMeter {
             return this.data["nn"];
         }
 
-        /* bootstrap apparently infects jquery
-            setBootstrap(bootstrap:Bootstrap):void {
-                this.data["bootstrap"] = bootstrap;
-            }
+        setUnigramExtractor(unigram: UnigramExtractor.UnigramExtractor.UnigramExtractor) {
+            this.data["unigram"] = unigram;
+        }
 
-            getBootstrap():Bootstrap {
-                return this.data["bootstrap"];
-            }
-            */
+        getUnigramExtractor(): UnigramExtractor.UnigramExtractor.UnigramExtractor {
+            return this.data["unigram"];
+        }
+
     }
 
     export var instance = new Registry();

@@ -12,6 +12,7 @@ export module Dictionaries {
         englishwordsDict: Dictionary;
         wikipediaDict: Dictionary;
         petnames: Dictionary;
+        personalInformation: {[key:string]:number};
         constructor() {
             var helper:Helper.Helper.Helper = PasswordMeter.PasswordMeter.instance.getHelper();
             this.blacklistDict = helper.compressedFileToDict("dictionary-blacklist1c8-compressed.txt");
@@ -28,6 +29,11 @@ export module Dictionaries {
             for (var i = 0; i < temppetnames.length; i++) {
                 this.petnames[temppetnames[i]] = true;
             }
+            this.personalInformation = {};
+        }
+
+        setPersonalInformation(ps:{[key:string]:number}){
+            this.personalInformation = ps;
         }
     }
 

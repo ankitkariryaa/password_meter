@@ -77,6 +77,8 @@ export interface Config {
     forbidChars: ConfigForbidChars;
     repeatChars: ConfigLimit;
     usernameDifference: ConfigLimit;
+    personalInfoDifference: ConfigLimit;
+    allUserInfoDifference: ConfigLimit;
     neuralNetworkConfig: ConfigNeuralNetwork;
 }
 
@@ -139,6 +141,14 @@ export var passwordMeterDefaultConfig: Config = {
     usernameDifference: {
         active: true,
         limit: 1, // prohibit passwords being N or fewer characters different than username
+    },
+    personalInfoDifference: {
+        active: true,
+        limit: 1, // prohibit passwords being N or fewer characters different than personalInfo known about the user
+    },
+    allUserInfoDifference: {
+        active: true,
+        limit: 1, // prohibit passwords being N or fewer characters different than personalInfo known about the user
     },
     neuralNetworkConfig: {
         intermediate: "basic_3M.info_and_guess_numbers.no_bloomfilter.json",
