@@ -185,7 +185,7 @@ export module StrengthCalculator {
 			var allInfoObj = RuleFunctions.RuleFunctions.allInfoInPassword(pw, allInfo);
 
 			// Take the coefficients from our regression
-			var coefficients = [1.530, 0.3129, 0.9912, 0.04637, -0.03885, -0.1172, -0.2976, -0.0008581, -0.3008, -0.5566, 0, 0.9108, 0.7369, 0.7578, 0, -0.1213, -0.2402, -0.1364, -0.5534, 1.927, 0.001496, -0.3946 /*Over class*/, -2, -1];
+			var coefficients = [1.530, 0.3129, 0.9912, 0.04637, -0.03885, -0.1172, -0.2976, -0.0008581, -0.3008, -0.5566, 0, 0.9108, 0.7369, 0.7578, 0, -0.1213, -0.2402, -0.1364, -0.5534, 1.927, 0.001496, -0.3946 /*Over class*/, -0.6, -0.4];
 			var subscores: Array<number> = [1, lenObj.length, classObj.count, duplicatedObj.count,
 				repeatObj.count, patternsObj.score, sequenceObj.count, structureObj.score,
 				upperPredictableObj.score, digitsPredictableObj.score, symbolsPredictableObj.score,

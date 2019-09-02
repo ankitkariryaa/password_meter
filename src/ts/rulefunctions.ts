@@ -393,6 +393,7 @@ export module RuleFunctions {
               return b.length - a.length;
             });
             for (let item of coreInfoSorted){
+                // if(item.length <2) break;
                 if (pwcopy.includes(item)){
                   var re = new RegExp(item, 'g');
                   pwcopy = pwcopy.replace(re,'');
@@ -400,7 +401,6 @@ export module RuleFunctions {
 
                 }
             }
-            console.log(piInPw);
             if (coreInfo.length == 0 || pw.length == 0 || piInPw.length == 0) {
                 compliant = true;
             }
@@ -437,7 +437,6 @@ export module RuleFunctions {
                   allInfoInPw.push(item);
                 }
             }
-            console.log(allInfoInPw);
             if (allInfo.length == 0 || pw.length == 0 || allInfoInPw.length == 0) {
                 compliant = true;
             }
@@ -507,9 +506,9 @@ export module RuleFunctions {
                 count += piInPw[i].length;
             }
             problemText = piInPw.join(", ").escapeHTML();
-            publicText = "Don't use your personal information in your password";
-            sensitiveText = "Don't use your personal information (" + piInPw.join(", ") + ") in your password";
-            reasonWhy = "Attackers know to guess your personal information as part of your password";
+            publicText = "Don't use your personal information in the password";
+            sensitiveText = "Don't use your personal information (<b>" + piInPw.join("</b>, <b>") + "</b>) in the password";
+            reasonWhy = "Attackers use personal information to guess the password";
         }
 
          return {
@@ -564,9 +563,9 @@ export module RuleFunctions {
                 count += piInPw[i].length;
             }
             problemText = piInPw.join(", ").escapeHTML();
-            publicText = "Don't use your information available on your social media profile in your password";
-            sensitiveText = "Don't use your information available on your social media profile (" + piInPw.join(", ") + ") in your password";
-            reasonWhy = "Attackers know to guess your social media information as part of your password";
+            publicText = "Don't use information available on your social media profile in the password";
+            sensitiveText = "Don't use information available on your social media profile (<b>" + piInPw.join("</b>, <b>") + "</b>) in the password";
+            reasonWhy = "Attackers often use social media profiles to guess the password";
         }
 
          return {
