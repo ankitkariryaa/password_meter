@@ -14,7 +14,6 @@ import Helper = require("./helper");
 import Config = require("./config");
 import Dictionaries = require("./dict-misc");
 import NeuralNetwork = require("./nn-misc");
-import UnigramExtractor = require("./unigram-extractor");
 import StrengthCalculator = require("./strength-calculator");
 
 
@@ -77,15 +76,6 @@ export module PasswordMeter {
         getNN(): NeuralNetwork.NeuralNetwork.NeuralNetworkInterface {
             return this.data["nn"];
         }
-
-        setUnigramExtractor(unigram: UnigramExtractor.UnigramExtractor.UnigramExtractor) {
-            this.data["unigram"] = unigram;
-        }
-
-        getUnigramExtractor(): UnigramExtractor.UnigramExtractor.UnigramExtractor {
-            return this.data["unigram"];
-        }
-
     }
 
     export var instance = new Registry();

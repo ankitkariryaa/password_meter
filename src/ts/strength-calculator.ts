@@ -67,7 +67,7 @@ export module StrengthCalculator {
 
 		var minReqObj = RuleFunctions.RuleFunctions.verifyMinimumRequirements(pw, username, coreInfo, allInfo);
 		var policyGripes = [];
-		console.log(minReqObj);
+		// console.log(minReqObj);
 		if (!minReqObj.compliant){
 			var detail = minReqObj.detail;
 			for (var metric in detail.compliance) {

@@ -58,14 +58,6 @@ export module RuleFunctions {
                 compliant = true;
             }
 
-            // report
-            if (compliant) {
-                thisExplanation = "<span style='color:" + compliantColor + "'>" + compliantSymbol + thisExplanation;
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation;
-            }
-            thisExplanation += "</span>";
-
             explanation["length"] = thisExplanation;
             compliance["length"] = compliant;
         }
@@ -114,14 +106,6 @@ export module RuleFunctions {
             if (numClasses >= minCharacterClasses && numClasses <= maxCharacterClasses) {
                 compliant = true;
             }
-
-            // report
-            if (compliant) {
-                thisExplanation = "<span style='color:" + compliantColor + "'>" + compliantSymbol + thisExplanation;
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation;
-            }
-            thisExplanation = thisExplanation += "</span>";
 
             explanation["classCount"] = thisExplanation;
             compliance["classCount"] = compliant;
@@ -177,14 +161,6 @@ export module RuleFunctions {
                 (!symbolsRequired || hasSymbols)) {
                 compliant = true;
             }
-
-            // report
-            if (compliant) {
-                thisExplanation = "<span style='color:" + compliantColor + "'>" + compliantSymbol + thisExplanation;
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation;
-            }
-            thisExplanation = thisExplanation += "</span>";
 
             explanation["classRequire"] = thisExplanation;
             compliance["classRequire"] = compliant;
@@ -243,7 +219,7 @@ export module RuleFunctions {
 
             // report
             if (compliant) {
-                thisExplanation = "<span style='color:" + compliantColor + "'>" + compliantSymbol + thisExplanation;
+                // thisExplanation =  thisExplanation;
             } else {
                 // now explain what specific, forbidden characters they used
                 var forbiddenCharactersUsed: Array<string> = [];
@@ -267,9 +243,7 @@ export module RuleFunctions {
                 }
                 thisExplanation += " (You used <b>" + forbiddenCharactersUsed.join("</b>, <b>") + "</b>)";
 
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation;
             }
-            thisExplanation = thisExplanation += "</span>";
 
             explanation["classAllow"] = thisExplanation;
             compliance["classAllow"] = compliant;
@@ -304,11 +278,6 @@ export module RuleFunctions {
 
             // report
             // note that we are only complaining about disallowed passwords if they use one
-            if (compliant) {
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
-
-            }
 
             if (!compliant) {
                 explanation["forbidPasswords"] = thisExplanation;
@@ -342,12 +311,6 @@ export module RuleFunctions {
                 compliant = true;
             }
 
-            // report
-            if (compliant) {
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
-            }
-
             if (!compliant) {
                 explanation["forbidChars"] = thisExplanation;
             }
@@ -377,14 +340,10 @@ export module RuleFunctions {
 
             // report
             if (compliant) {
-                thisExplanation = "<span style='color:" + compliantColor + "'>" + compliantSymbol + thisExplanation;
-
+                // thisExplanation =  thisExplanation;
             } else {
                 thisExplanation += " (<b>" + charsRepeatedConsecutively.removeDuplicates().join("</b>, <b> ") + "</b>)";
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation;
-
             }
-            thisExplanation += "</span>";
 
             explanation["repeatChars"] = thisExplanation;
             compliance["repeatChars"] = compliant;
@@ -411,12 +370,6 @@ export module RuleFunctions {
                 compliant = true;
             }
 
-            // report
-            if (compliant) {
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
-            }
-
             if (!compliant) {
                 explanation["usernameDifference"] = thisExplanation;
             }
@@ -434,7 +387,6 @@ export module RuleFunctions {
             var pwcopy = pw.toLowerCase();
             // remove all occurrences of username
             let piInPw: Array<string>  = new Array<string> ();
-
             let coreInfoSorted = coreInfo.sort(function(a:string, b:string):number{
               // ASC  -> a.length - b.length
               // DESC -> b.length - a.length
@@ -445,17 +397,14 @@ export module RuleFunctions {
                   var re = new RegExp(item, 'g');
                   pwcopy = pwcopy.replace(re,'');
                   piInPw.push(item);
+
                 }
             }
+            console.log(piInPw);
             if (coreInfo.length == 0 || pw.length == 0 || piInPw.length == 0) {
                 compliant = true;
             }
 
-            // report
-            if (compliant) {
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
-            }
             if (!compliant) {
                 explanation["personalInfoDifference"] = thisExplanation;
             }
@@ -488,14 +437,9 @@ export module RuleFunctions {
                   allInfoInPw.push(item);
                 }
             }
+            console.log(allInfoInPw);
             if (allInfo.length == 0 || pw.length == 0 || allInfoInPw.length == 0) {
                 compliant = true;
-            }
-
-            // report
-            if (compliant) {
-            } else {
-                thisExplanation = "<span style='color:" + noncompliantColor + "'>" + noncompliantSymbol + thisExplanation + "</span>";
             }
 
             if (!compliant) {
@@ -545,7 +489,6 @@ export module RuleFunctions {
         var pwcopy = pw.toLowerCase();
         // remove all occurrences of info
         let piInPw: Array<string>  = new Array<string> ();
-
         let coreInfoSorted = coreInfo.sort(function(a:string, b:string):number{
           // ASC  -> a.length - b.length
           // DESC -> b.length - a.length
