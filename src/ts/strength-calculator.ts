@@ -336,7 +336,9 @@ export module StrengthCalculator {
 				reasonWhy.push(structureObj.reasonWhy);
 				//problemText.push(structureObj.problemText);
 			}
-			if(pw.length < this.config.length.minLength) 
+
+			//Minimum password length
+			if(pw.length < 5)//this.config.length.minLength) 
 				overallScore = 0;
 
 		    if (overallScore < (originalPW.length / 2)) {

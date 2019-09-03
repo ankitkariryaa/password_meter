@@ -356,7 +356,7 @@ export module RuleFunctions {
             var compliant = false;
 
             // explain
-            thisExplanation = "Not base your password around your username";
+            thisExplanation = "Not be based around your username";
 
             //check
             var pwcopy = pw.toLowerCase();
@@ -382,7 +382,7 @@ export module RuleFunctions {
 
             // explain
              // thisExplanation = "Not base your password on information publicly available on your social media profile";
-            thisExplanation = "Not base your password on information publicly known about you";
+            thisExplanation = "Not be based on information publicly known about you";
             //check
             var pwcopy = pw.toLowerCase();
             // remove all occurrences of username
@@ -417,7 +417,7 @@ export module RuleFunctions {
             var compliant = false;
 
             // explain
-            thisExplanation = "Not base your password on words you commonly use on your social media profile";
+            thisExplanation = "Not be based on words you commonly use on social media";
 
             //check
             var pwcopy = pw.toLowerCase();
