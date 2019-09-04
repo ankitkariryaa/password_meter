@@ -506,8 +506,8 @@ export module RuleFunctions {
                 count += piInPw[i].length;
             }
             problemText = piInPw.join(", ").escapeHTML();
-            publicText = "Don't use your personal information in the password";
-            sensitiveText = "Don't use your personal information (<b>" + piInPw.join("</b>, <b>") + "</b>) in the password";
+            publicText = "Don't include personal information or words that appear in your profile in the password";
+            sensitiveText = "Don't include your personal information (<b>" + piInPw.join("</b>, <b>") + "</b>) in the password";
             reasonWhy = "Attackers use personal information to guess the password";
         }
 
@@ -563,9 +563,9 @@ export module RuleFunctions {
                 count += piInPw[i].length;
             }
             problemText = piInPw.join(", ").escapeHTML();
-            publicText = "Don't use information available on your social media profile in the password";
-            sensitiveText = "Don't use information available on your social media profile (<b>" + piInPw.join("</b>, <b>") + "</b>) in the password";
-            reasonWhy = "Attackers often use social media profiles to guess the password";
+            publicText = "Don't include words that appear in your social media posts in the password";
+            sensitiveText = "Don't include words (<b>" + piInPw.join("</b>, <b>") + "</b>) that appear in your social media posts in the password";
+            reasonWhy = "Attackers often use social media profiles and posts to guess the password";
         }
 
          return {
